@@ -29,7 +29,19 @@ routes.post('/newbook',(req,res)=>{
     const id = books.length+1;
     const newbook = {id,title,author};
     books.push(newbook);
-    res.json({message: "New book added", book: newbook});
+    res.status(201).json({message: "New book added", book: newbook});
+})
+
+routes.delete('/deletebook/:id',(req,res)=>{
+    console.log("Delete request received");
+    bookid=parseInt(req.params.id);
+    const bookindex=books.findIndex(b=>b.id===bookid);
+    if(bookindex!==-1){
+        books.splice(bookindex,1);
+        res.json({message: "Book deleted successfully"});
+    }else{
+        res.status(400).json({message: "Book not found"});
+    }
 })
    
 module.exports = routes;
