@@ -9,6 +9,9 @@ const booksTable = mysqlTable("books", {
     description: varchar({ length: 1024 }).notNull(),
     authorid: bigint("author_id", {mode: "number"}).notNull().references(()=> authorsTable.id),
 
-})
+},(table) => [
+    index('title_search_index').using('gin', sql`to_tsvector('english', ${table.title})`),
+  ]
+);
 
 module.exports={booksTable};
